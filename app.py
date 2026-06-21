@@ -13,6 +13,20 @@ st.title(
     "Persona Adaptive Customer Support Agent"
 )
 
+# Initialize RAG only once
+if "rag" not in st.session_state:
+
+    rag = RAGPipeline()
+
+    try:
+        # Build index if empty
+        if rag.vector_store._collection.count() == 0:
+            rag.build_index()
+    except Exception:
+        rag.build_index()
+
+    st.session_state.rag = rag
+
 query = st.text_area(
     "Customer Message"
 )
@@ -20,6 +34,7 @@ query = st.text_area(
 if st.button("Submit"):
 
     if not query.strip():
+
         st.warning(
             "Please enter a message."
         )
@@ -38,7 +53,7 @@ if st.button("Submit"):
                 persona_result["persona"]
             )
 
-            rag = RAGPipeline()
+            rag = st.session_state.rag
 
             docs = rag.retrieve_context(
                 query
@@ -82,6 +97,11 @@ if st.button("Submit"):
         st.subheader(
             "Retrieved Sources"
         )
+
+        if not docs:
+            st.warning(
+                "No documents retrieved from knowledge base."
+            )
 
         for doc in docs:
 
