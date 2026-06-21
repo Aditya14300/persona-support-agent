@@ -1,0 +1,4 @@
+Order Tracking
+
+Customers can track orders using Order ID.
+Tracking updates every 30 minutes.

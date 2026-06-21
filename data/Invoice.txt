@@ -1,0 +1,4 @@
+Invoice Support
+
+Invoices are generated automatically after successful payment.
+Customers can download invoices from My Orders.
